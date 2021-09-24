@@ -1,0 +1,157 @@
+.body {
+	margin: 0;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	padding: 20px;
+}
+
+.error {
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	right: 0px;
+
+	text-align: center;
+}
+
+/*************************************/
+
+.weather {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	min-width: 500px;
+	height: 240px;
+	padding: 30px 25px 20px;
+	box-sizing: border-box;
+
+	background-color: lightgoldenrodyellow;
+	border: 3px solid #231f20;
+	border-radius: 20px;
+
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.weather_night {
+	background-color: lightslategray;
+}
+
+.wheather__header {
+	position: relative;
+	display: flex;
+	align-items: flex-end;
+}
+
+.weather__city-name {
+	margin: 0;
+	font-size: 24px;
+	cursor: pointer;
+}
+
+.weather__hint {
+	height: 30px;
+	cursor: pointer;
+}
+
+.weather__info-block {
+	display: flex;
+	align-items: center;
+	padding: 10px 0;
+}
+
+.weather__info {
+	margin: 0;
+	font-size: 20px;
+}
+
+.weather__temperature {
+	margin: 0;
+	font-size: 40px;
+	letter-spacing: -2px;
+	line-height: 100%;
+}
+
+.weather__icon {
+	height: 80px;
+	padding: 0 20px;
+}
+
+.weather__icon_small {
+	height: 25px;
+	padding: 0 5px;
+}
+
+.weather__compass {
+	height: 10px;
+	margin-right: 5px;
+}
+
+.weather__wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-right: 30px;
+}
+
+.weather__wrapper:last-child {
+	margin-right: 0;
+}
+
+.weather__wrapper_column {
+	flex-direction: column;
+	align-items: flex-start;
+	height: 50px;
+}
+
+/*************************************/
+
+.input-city {
+	width: 50%;
+	border: none;
+	border-bottom: 1px solid black;
+	background-color: transparent;
+	font-size: 20px;
+}
+
+.input-city:focus {
+	outline: none;
+}
+
+.suggested-cities {
+	position: absolute;
+	top: 28px;
+	left: 25px;
+	right: 25px;
+	z-index: 1;
+
+	padding: 5px;
+
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: lightskyblue;
+}
+
+.suggested-text {
+	margin: 0;
+	padding: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.suggested-text:hover {
+	background-color: #41769e;
+	color: white;
+}
+
+.suggested_error {
+	margin: 0;
+	font-size: 12px;
+}
+
+.hidden {
+	display: none;
+}
