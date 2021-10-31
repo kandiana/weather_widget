@@ -1,10 +1,10 @@
-// const counter = new Counter();
+const counter = new Counter();
 
-// counter.init(
-//   'BFD7FADF-E225-417B-9289-079DE6967A7F',
-//   String(Math.random()).substr(2, 12),
-//   'bulls and cows'
-// );
+counter.init(
+  'BFD7FADF-E225-417B-9289-079DE6967A7F',
+  String(Math.random()).substr(2, 12),
+  'bulls and cows'
+);
 
 const getBrowser = () => {
   if (/MSIE/.test(navigator.userAgent)) {
@@ -51,14 +51,13 @@ if (window.performance) {
   if (navigation) {
     console.log('connect = ' + Math.round(navigation.connectEnd - navigation.connectStart));
     console.log('ttfb = ' + Math.round(navigation.responseEnd - navigation.requestStart));
+    console.log('ttfb = ' + Math.round(navigation.responseEnd - navigation.requestStart));
   }
+
+  console.log(navigation);
 }
 
-// if (window.performance) {
-//   let [navigation] = window.performance.getEntriesByType('navigation');
-
-//   if (navigation) {
-//     counter.send('connect', Math.round(navigation.connectEnd - navigation.connectStart));
-//     counter.send('ttfb', Math.round(navigation.responseEnd - navigation.requestStart));
-//   }
-// }
+if (navigation) {
+  counter.send('connect', Math.round(navigation.connectEnd - navigation.connectStart));
+  counter.send('ttfb', Math.round(navigation.responseEnd - navigation.requestStart));
+}
