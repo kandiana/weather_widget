@@ -19,13 +19,183 @@ function prepareData(result) {
   });
 }
 
-// добавить метрику за выбранный день
-function addMetricByDate(data, page, name, date) {
-  let sampleData = data
-    .filter((item) => item.page == page && item.name == name && item.date == date)
+const PARAMETERS = {
+  connect: 'connect',
+  ttfb: 'ttfb',
+  cities: 'getCitiesData',
+  weather: 'getWeatherData',
+  render: 'renderMainBlock',
+  icon: 'loadLargestIcon',
+};
+
+const BROWSERS = {
+  ie: 'Internet Explorer',
+  edge: 'Edge',
+  firefox: 'Firefox',
+  opera: 'Opera',
+  yandex: 'Yandex Browser',
+  google: 'Google Chrome',
+  safari: 'Safari',
+  other: 'other',
+};
+
+const PLATFORMS = { touch: 'touch', desktop: 'desktop' };
+
+const CONNECTION_TYPES = {
+  '2G': '2g',
+  '3G': '3g',
+  '4G': '4g',
+  '5g': '5g',
+  other: 'unsupported option',
+};
+
+// показать значение метрики за несколько дней
+function getMetricByPeriod(data, page, name, dateStart, dateEnd) {
+  const sampleData = data
+    .filter(
+      (item) =>
+        item.page == page &&
+        item.name == PARAMETERS[name] &&
+        item.date >= dateStart &&
+        item.date <= dateEnd
+    )
     .map((item) => item.value);
 
-  let result = {};
+  const result = {};
+
+  result.hits = sampleData.length;
+  result.p25 = quantile(sampleData, 0.25);
+  result.p50 = quantile(sampleData, 0.5);
+  result.p75 = quantile(sampleData, 0.75);
+  result.p95 = quantile(sampleData, 0.95);
+
+  return result;
+}
+
+function calcMetricByPeriod(data, page, dateStart, dateEnd) {
+  console.log(`All metrics for period from ${dateStart} to ${dateEnd}:`);
+
+  const tableGeneral = {};
+  Object.keys(PARAMETERS).forEach((parameter) => {
+    const result = getMetricByPeriod(data, page, parameter, dateStart, dateEnd);
+    if (result) {
+      tableGeneral[parameter] = result;
+    }
+  });
+
+  console.table(tableGeneral);
+}
+
+// сравнить метрику в разных срезах
+function getBrowserMetric(data, page, name, browser) {
+  const sampleData = data
+    .filter(
+      (item) =>
+        item.page == page &&
+        item.name == PARAMETERS[name] &&
+        item.additional.browser == BROWSERS[browser]
+    )
+    .map((item) => item.value);
+
+  const result = {};
+
+  result.hits = sampleData.length;
+  result.p25 = quantile(sampleData, 0.25);
+  result.p50 = quantile(sampleData, 0.5);
+  result.p75 = quantile(sampleData, 0.75);
+  result.p95 = quantile(sampleData, 0.95);
+
+  return result.hits === 0 ? undefined : result;
+}
+
+function getPlatformMetric(data, page, name, platform) {
+  const sampleData = data
+    .filter(
+      (item) =>
+        item.page == page &&
+        item.name == PARAMETERS[name] &&
+        item.additional.platform == PLATFORMS[platform]
+    )
+    .map((item) => item.value);
+
+  const result = {};
+
+  result.hits = sampleData.length;
+  result.p25 = quantile(sampleData, 0.25);
+  result.p50 = quantile(sampleData, 0.5);
+  result.p75 = quantile(sampleData, 0.75);
+  result.p95 = quantile(sampleData, 0.95);
+
+  return result.hits === 0 ? undefined : result;
+}
+
+function getConnectionTypeMetric(data, page, name, type) {
+  const sampleData = data
+    .filter(
+      (item) =>
+        item.page == page &&
+        item.name == PARAMETERS[name] &&
+        item.additional.connectionType == CONNECTION_TYPES[type]
+    )
+    .map((item) => item.value);
+
+  const result = {};
+
+  result.hits = sampleData.length;
+  result.p25 = quantile(sampleData, 0.25);
+  result.p50 = quantile(sampleData, 0.5);
+  result.p75 = quantile(sampleData, 0.75);
+  result.p95 = quantile(sampleData, 0.95);
+
+  return result.hits === 0 ? undefined : result;
+}
+
+// сравнить метрику в разных срезах
+function compareMetric(data, page, name) {
+  console.log(`Metric: ${PARAMETERS[name]}, Browsers`);
+  const tableBrowser = {};
+  Object.keys(BROWSERS).forEach((browser) => {
+    const result = getBrowserMetric(data, page, name, browser);
+    if (result) {
+      tableBrowser[browser] = result;
+    }
+  });
+  console.table(tableBrowser);
+
+  console.log('\n\n');
+
+  console.log(`Metric: ${PARAMETERS[name]}, Platform`);
+  const tablePlatform = {};
+  Object.keys(PLATFORMS).forEach((platform) => {
+    const result = getPlatformMetric(data, page, name, platform);
+    if (result) {
+      tablePlatform[platform] = result;
+    }
+  });
+
+  console.table(tablePlatform);
+
+  console.log('\n\n');
+
+  console.log(`Metric: ${PARAMETERS[name]}, Connection type`);
+  const tableConnectionType = {};
+  Object.keys(CONNECTION_TYPES).forEach((type) => {
+    const result = getConnectionTypeMetric(data, page, name, type);
+    if (result) {
+      tableConnectionType[type] = result;
+    }
+  });
+
+  console.table(tableConnectionType);
+}
+
+// добавить метрику за выбранный день
+function addMetricByDate(data, page, name, date) {
+  const sampleData = data
+    .filter((item) => item.page == page && item.name == PARAMETERS[name] && item.date == date)
+    .map((item) => item.value);
+
+  const result = {};
 
   result.hits = sampleData.length;
   result.p25 = quantile(sampleData, 0.25);
@@ -39,15 +209,15 @@ function addMetricByDate(data, page, name, date) {
 function calcMetricsByDate(data, page, date) {
   console.log(`All metrics for ${date}:`);
 
-  let table = {};
-  table.connect = addMetricByDate(data, page, 'connect', date);
-  table.ttfb = addMetricByDate(data, page, 'ttfb', date);
-  table.cities = addMetricByDate(data, page, 'getCitiesData', date);
-  table.weather = addMetricByDate(data, page, 'getWeatherData', date);
-  table.render = addMetricByDate(data, page, 'renderMainBlock', date);
-  table.icon = addMetricByDate(data, page, 'loadLargestIcon', date);
+  const tableGeneral = {};
+  Object.keys(PARAMETERS).forEach((parameter) => {
+    const result = addMetricByDate(data, page, parameter, date);
+    if (result) {
+      tableGeneral[parameter] = result;
+    }
+  });
 
-  console.table(table);
+  console.table(tableGeneral);
 }
 
 fetch('https://shri.yandex/hw/stat/data?counterId=AE7E99E2-CE57-4CDF-B138-38C847F82417')
@@ -55,7 +225,15 @@ fetch('https://shri.yandex/hw/stat/data?counterId=AE7E99E2-CE57-4CDF-B138-38C847
   .then((result) => {
     let data = prepareData(result);
 
+    calcMetricByPeriod(data, 'weather widget', '2021-10-31', '2021-11-06');
+
+    console.log('\n------------------------------------\n');
+
     calcMetricsByDate(data, 'weather widget', '2021-10-31');
 
-    // добавить свои сценарии, реализовать функции выше
+    Object.keys(PARAMETERS).forEach((parameter) => {
+      console.log('\n------------------------------------\n');
+
+      compareMetric(data, 'weather widget', parameter);
+    });
   });
