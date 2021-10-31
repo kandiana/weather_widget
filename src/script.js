@@ -7,7 +7,7 @@ const MAX_NUMBER_OF_SUGGESTIONS = 5;
 const cities = [];
 
 /*****************************/
-
+//метрики
 let citiesRequestStart = Date.now();
 let weatherRequestStart = Date.now();
 
@@ -21,6 +21,7 @@ const inputBlock = weatherBlock.querySelector('.input-city');
 /************************ WEATHER *************************/
 
 function loadWheatherData(block) {
+  //метрики
   counter.send('getWeatherData', Math.round(Date.now() - weatherRequestStart));
 
   const data = JSON.parse(block);
@@ -42,12 +43,14 @@ function loadWheatherData(block) {
   weatherBlock.appendChild(node);
 
   document.querySelector('.weather__icon').addEventListener('load', () => {
+    //метрики
     counter.send('loadLargestIcon', Math.round(Date.now() - iconLoadStart));
   });
 
   const compassIcon = weatherBlock.querySelector('.weather__compass');
   compassIcon.style = `transform: rotate(${data.wind.deg + 135}deg)`;
 
+  //метрики
   counter.send('renderMainBlock', Math.round(Date.now() - renderStart));
 }
 
@@ -79,6 +82,7 @@ function processRecievedData(event, onSuccess, onError) {
 }
 
 function getWeatherData(cityName) {
+  //метрики
   weatherRequestStart = Date.now();
 
   const xhr = new XMLHttpRequest();
@@ -201,6 +205,7 @@ function updateCityName() {
 }
 
 function loadCitiesData(block) {
+  //метрики
   counter.send('getCitiesData', Math.round(Date.now() - citiesRequestStart));
 
   const data = JSON.parse(block);
@@ -216,6 +221,7 @@ function loadCitiesData(block) {
 }
 
 function getCities() {
+  //метрики
   citiesRequestStart = Date.now();
 
   const xhr = new XMLHttpRequest();
