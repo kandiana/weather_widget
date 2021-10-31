@@ -6,6 +6,12 @@ const loader =
 const MAX_NUMBER_OF_SUGGESTIONS = 5;
 const cities = [];
 
+/*****************************/
+let citiesRequestStart = Date.now();
+let weatherRequestStart = Date.now();
+
+/*****************************/
+
 function main() {
   const weatherBlock = document.querySelector('.weather');
   const cityBlock = weatherBlock.querySelector('.weather__city-name');
@@ -15,6 +21,8 @@ function main() {
   /************************ WEATHER *************************/
 
   function loadWheatherData(block) {
+    console.log('got weather data = ' + (Date.now() - weatherRequestStart));
+
     const data = JSON.parse(block);
 
     weatherBlock.classList.remove('weather_night');
@@ -23,15 +31,27 @@ function main() {
       weatherBlock.classList.add('weather_night');
     }
 
+    const renderStart = Date.now();
+
     const node = buildWeatherBlock(data);
 
     const formerWeatherData = weatherBlock.lastChild;
     formerWeatherData.remove();
 
+    const iconLoadStart = Date.now();
     weatherBlock.appendChild(node);
+
+    document.querySelector('.weather__icon').addEventListener('load', () => {
+      console.log(
+        'icon load end = ' + (Date.now() - iconLoadStart),
+        'icon load end = ' + (Date.now() - iconLoadStart2)
+      );
+    });
 
     const compassIcon = weatherBlock.querySelector('.weather__compass');
     compassIcon.style = `transform: rotate(${data.wind.deg + 135}deg)`;
+
+    console.log('render end = ' + (Date.now() - renderStart));
   }
 
   function showError(status, description) {
@@ -62,6 +82,8 @@ function main() {
   }
 
   function getWeatherData(cityName) {
+    weatherRequestStart = Date.now();
+
     const xhr = new XMLHttpRequest();
     const requestURL = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`;
 
@@ -182,6 +204,7 @@ function main() {
   }
 
   function loadCitiesData(block) {
+    console.log('got cities data = ' + (Date.now() - citiesRequestStart));
     const data = JSON.parse(block);
 
     for (let city of data) {
@@ -195,6 +218,8 @@ function main() {
   }
 
   function getCities() {
+    citiesRequestStart = Date.now();
+
     const xhr = new XMLHttpRequest();
     const requestURL =
       'https://raw.githubusercontent.com/pensnarik/russian-cities/master/russian-cities.json';
