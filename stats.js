@@ -162,8 +162,6 @@ function compareMetric(data, page, name) {
   });
   console.table(tableBrowser);
 
-  console.log('\n\n');
-
   console.log(`Metric: ${PARAMETERS[name]}, Platform`);
   const tablePlatform = {};
   Object.keys(PLATFORMS).forEach((platform) => {
@@ -174,8 +172,6 @@ function compareMetric(data, page, name) {
   });
 
   console.table(tablePlatform);
-
-  console.log('\n\n');
 
   console.log(`Metric: ${PARAMETERS[name]}, Connection type`);
   const tableConnectionType = {};
