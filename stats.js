@@ -227,13 +227,9 @@ fetch('https://shri.yandex/hw/stat/data?counterId=AE7E99E2-CE57-4CDF-B138-38C847
 
     calcMetricByPeriod(data, 'weather widget', '2021-10-31', '2021-11-06');
 
-    console.log('\n------------------------------------\n');
-
     calcMetricsByDate(data, 'weather widget', '2021-10-31');
 
     Object.keys(PARAMETERS).forEach((parameter) => {
-      console.log('\n------------------------------------\n');
-
       compareMetric(data, 'weather widget', parameter);
     });
   });
