@@ -149,19 +149,19 @@ function stylePressure(pressure) {
 
 function weatherTemplate(weatherData) {
 	return {
-		block: 'div',
+		tag: 'div',
 		content: [
 			{
-				block: 'div',
+				tag: 'div',
 				cls: 'weather__info-block',
 				content: [
 					{
-						block: 'p',
+						tag: 'p',
 						cls: ['weather__info', 'weather__temperature'],
 						content: styleTemperature(weatherData.main.temp),
 					},
 					{
-						block: 'img',
+						tag: 'img',
 						attrs: {
 							src: getIcon(weatherData),
 							alt: weatherData.weather[0].main,
@@ -170,20 +170,20 @@ function weatherTemplate(weatherData) {
 						cls: ['weather__info', 'weather__icon'],
 					},
 					{
-						block: 'div',
+						tag: 'div',
 						cls: ['weather__wrapper', 'weather__wrapper_column'],
 						content: [
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: styleDescription(weatherData.weather[0].description),
 							},
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: [
 									{
-										block: 'span',
+										tag: 'span',
 										content: 'Ощущается как ',
 									},
 									styleTemperature(weatherData.main.feels_like),
@@ -194,15 +194,15 @@ function weatherTemplate(weatherData) {
 				],
 			},
 			{
-				block: 'div',
+				tag: 'div',
 				cls: 'weather__info-block',
 				content: [
 					{
-						block: 'div',
+						tag: 'div',
 						cls: 'weather__wrapper',
 						content: [
 							{
-								block: 'img',
+								tag: 'img',
 								attrs: {
 									src: './imgs/wind.svg',
 									alt: 'wind',
@@ -211,12 +211,12 @@ function weatherTemplate(weatherData) {
 								cls: 'weather__icon_small',
 							},
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: getWindDirection(weatherData.wind.deg),
 							},
 							{
-								block: 'img',
+								tag: 'img',
 								attrs: {
 									src: './imgs/compass.svg',
 									alt: 'wind',
@@ -225,18 +225,18 @@ function weatherTemplate(weatherData) {
 								cls: ['weather__icon_small', 'weather__compass'],
 							},
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: styleWindSpeed(weatherData.wind.speed),
 							},
 						],
 					},
 					{
-						block: 'div',
+						tag: 'div',
 						cls: 'weather__wrapper',
 						content: [
 							{
-								block: 'img',
+								tag: 'img',
 								attrs: {
 									src: './imgs/humidity.svg',
 									alt: 'humidity',
@@ -245,18 +245,18 @@ function weatherTemplate(weatherData) {
 								cls: 'weather__icon_small',
 							},
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: styleHumidity(weatherData.main.humidity),
 							},
 						],
 					},
 					{
-						block: 'div',
+						tag: 'div',
 						cls: 'weather__wrapper',
 						content: [
 							{
-								block: 'img',
+								tag: 'img',
 								attrs: {
 									src: './imgs/barometer.svg',
 									alt: 'air-pressure',
@@ -265,7 +265,7 @@ function weatherTemplate(weatherData) {
 								cls: 'weather__icon_small',
 							},
 							{
-								block: 'p',
+								tag: 'p',
 								cls: 'weather__info',
 								content: stylePressure(weatherData.main.pressure),
 							},
@@ -298,7 +298,7 @@ function templateEngine(block) {
 		return fragment
 	}
 
-	const element = document.createElement(block.block)
+	const element = document.createElement(block.tag)
 
 	;[]
 		.concat(block.cls)

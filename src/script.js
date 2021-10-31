@@ -9,6 +9,7 @@ const cities = []
 function main() {
 	const weatherBlock = document.querySelector('.weather')
 	const cityBlock = weatherBlock.querySelector('.weather__city-name')
+	const locationIcon = weatherBlock.querySelector('.weather__hint')
 	const inputBlock = weatherBlock.querySelector('.input-city')
 
 	/************************ WEATHER *************************/
@@ -220,6 +221,9 @@ function main() {
 	getCities()
 
 	cityBlock.addEventListener('click', changeCity)
+	locationIcon.addEventListener('click', () => {
+		cityBlock.click()
+	})
 
 	inputBlock.addEventListener('blur', (event) => {
 		cityBlock.classList.remove('hidden')
