@@ -1,9 +1,9 @@
 const counter = new Counter();
 
 counter.init(
-  'BFD7FADF-E225-417B-9289-079DE6967A7F',
+  'AE7E99E2-CE57-4CDF-B138-38C847F82417',
   String(Math.random()).substr(2, 12),
-  'bulls and cows'
+  'weather widget'
 );
 
 const getBrowser = () => {
@@ -45,19 +45,17 @@ const getConnectionType = () => {
   } else return 'unsupported option';
 };
 
+counter.setAdditionalParams({
+  browser: getBrowser(),
+  platform: getPlatform(),
+  connectionType: getConnectionType(),
+});
+
 if (window.performance) {
   let [navigation] = window.performance.getEntriesByType('navigation');
 
   if (navigation) {
-    console.log('connect = ' + Math.round(navigation.connectEnd - navigation.connectStart));
-    console.log('ttfb = ' + Math.round(navigation.responseEnd - navigation.requestStart));
-    console.log('ttfb = ' + Math.round(navigation.responseEnd - navigation.requestStart));
+    counter.send('connect', Math.round(navigation.connectEnd - navigation.connectStart));
+    counter.send('ttfb', Math.round(navigation.responseEnd - navigation.requestStart));
   }
-
-  console.log(navigation);
-}
-
-if (navigation) {
-  counter.send('connect', Math.round(navigation.connectEnd - navigation.connectStart));
-  counter.send('ttfb', Math.round(navigation.responseEnd - navigation.requestStart));
 }
